@@ -10,7 +10,10 @@ const thunk = require('redux-thunk').default;
 const initialState = getInitialStateRenderer();
 
 const store = createStore(
-    () => {},
+    // TODO: import reducers
+    (state) => (
+        { settings: { i18n: 'en' } }
+    ),
     initialState,
     applyMiddleware(forwardToMain, thunk),
 );

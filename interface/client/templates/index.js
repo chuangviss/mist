@@ -33,6 +33,12 @@ Template.body.helpers({
         } else {
             var renderWindow = location.hash.match(/#([a-zA-Z]*)_?/);
 
+            // TODO: handle react components
+            const reactComponents = [ 'about', 'requestAccount' ];
+            if (reactComponents.includes(renderWindow[1])) {
+                return false;
+            }
+
             if (renderWindow.length > 0) {
                 return 'popupWindows_' + renderWindow[1];
             } else {
@@ -46,7 +52,7 @@ Template.body.helpers({
 Template.body.events({
     /**
     On drag over prevent redirect
-
+ 
     @event dragover body > *, drop body > *
     *
    'dragover body > *, drop body > *': function(e){

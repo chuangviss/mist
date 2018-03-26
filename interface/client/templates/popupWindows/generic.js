@@ -6,7 +6,7 @@ Template Controllers
 
 
 /**
-The about template
+The generic template
 
 @class [template] popupWindows_generic
 @constructor

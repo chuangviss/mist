@@ -28,6 +28,9 @@ window.dbSync = dbSync;
 window.dirname = remote.getGlobal('dirname');
 window.ipc = ipcRenderer;
 
+window.render = require('react-dom').render;
+window.React = require('react');
+window.i18n = require('../i18n.js');
 
 // remove require and module, because node-integration is on
 delete window.module;

@@ -1,11 +1,13 @@
-const { getLanguage } = require('./actions.js');
+import { getLanguage } from './actions.js';
+import About from './components/About';
+import RequestAccount from './components/RequestAccount';
 
 /**
 The init function of Mist
 
 @method mistInit
 */
-mistInit = function () {
+mistInit = () => {
     console.info('Initialise Mist Interface');
 
     EthBlocks.init();
@@ -17,7 +19,7 @@ mistInit = function () {
         }
     }, 500);
 
-    Tabs.onceSynced.then(function () {
+    Tabs.onceSynced.then(() => {
         if (location.search.indexOf('reset-tabs') >= 0) {
             console.info('Resetting UI tabs');
 
@@ -65,19 +67,44 @@ mistInit = function () {
     });
 };
 
+function renderReactComponent(locationHash) {
+    // NOTE: when adding new React components, remember to skip meteor template in templates/index.js
 
-Meteor.startup(function () {
+    // Example hash: '#about'. Manipulate string to return 'About'.
+    const componentName = locationHash.charAt(1).toUpperCase() + locationHash.slice(2);
+    console.log('∆∆∆ componentName', componentName);
+
+    // JSX can't evaluate an expression or string, so map imported components here
+    const components = {
+        About,
+        RequestAccount,
+    };
+
+    // Only render a component if it exists
+    if (!!components[componentName]) {
+        const Component = components[componentName];
+
+        render(<Component />, document.getElementById('react-entry'));
+    }
+}
+
+Meteor.startup(() => {
     console.info('Meteor starting up...');
+
+    // TODO: update language when redux updates
+    // 18n.changeLanguage(lang);
 
     if (!location.hash) {  // Main window
         EthAccounts.init();
         mistInit();
     }
 
+    renderReactComponent(location.hash);
+
     store.dispatch(getLanguage());
 
     // change moment and numeral language, when language changes
-    Tracker.autorun(function () {
+    Tracker.autorun(() => {
         if (_.isString(TAPi18n.getLanguage())) {
             const lang = TAPi18n.getLanguage().substr(0, 2);
             moment.locale(lang);
